@@ -83,7 +83,7 @@ public class PerformanceIntegration_Test {
     public void testPerformance_10_x_1500mb_3_threads() throws Exception {
         try {
             numberOfFiles = 10;
-            sizeOfFiles = 15; // 1500
+            sizeOfFiles = 1500;
             numberOfThreads = 3;
             bufferSize = 1048576; //default to 1MB
 
