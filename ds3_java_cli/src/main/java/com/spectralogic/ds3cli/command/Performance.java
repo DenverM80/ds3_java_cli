@@ -1,13 +1,11 @@
 package com.spectralogic.ds3cli.command;
 
-import com.google.common.collect.Lists;
 import com.spectralogic.ds3cli.Arguments;
 import com.spectralogic.ds3cli.ViewType;
 import com.spectralogic.ds3cli.exceptions.CommandException;
 import com.spectralogic.ds3cli.models.DefaultResult;
-import com.spectralogic.ds3cli.util.Ds3Provider;
-import com.spectralogic.ds3cli.util.FileUtils;
 import com.spectralogic.ds3cli.util.MemoryObjectChannelBuilder;
+import com.spectralogic.ds3cli.util.Utils;
 import com.spectralogic.ds3client.Ds3Client;
 import com.spectralogic.ds3client.commands.DeleteBucketRequest;
 import com.spectralogic.ds3client.commands.DeleteObjectRequest;
@@ -83,7 +81,7 @@ public class Performance extends CliCommand<DefaultResult> {
                 throw new CommandException("Encountered a DS3 Error", e);
             }
 
-            final List<Ds3Object> objList = getDs3Objects(numberOfFiles, sizeOfFiles);
+            final List<Ds3Object> objList = Utils.getDs3Objects(numberOfFiles, sizeOfFiles);
 
             /**** PUT ****/
             transfer(helpers, numberOfFiles, sizeOfFiles, objList, true);
@@ -95,16 +93,6 @@ public class Performance extends CliCommand<DefaultResult> {
             if (!doNotDelete) deleteAllContents(getClient(), this.bucketName);
         }
         return new DefaultResult("Done!");
-    }
-
-    private List<Ds3Object> getDs3Objects(final int numberOfFiles, final long sizeOfFiles) {
-        final List<Ds3Object> objList = Lists.newArrayList();
-        for (int i = 0; i < numberOfFiles; i++) {
-            final long testFileSize = sizeOfFiles * 1024L * 1024L;
-            final Ds3Object obj = new Ds3Object("file_" + i, testFileSize);
-            objList.add(obj);
-        }
-        return objList;
     }
 
     private void transfer(final Ds3ClientHelpers helpers, final int numberOfFiles, final long sizeOfFiles, final List<Ds3Object> objList, final boolean isPutCommand) throws SignatureException, IOException, XmlProcessingException {

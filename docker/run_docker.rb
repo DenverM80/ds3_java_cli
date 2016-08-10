@@ -52,8 +52,8 @@ puts "DOCKER_REPO #{ENV["DOCKER_REPO"]}"
 puts `git clone #{ENV["GIT_REPO"]} --branch #{ENV["GIT_BRANCH"]} --single-branch`
 
 # Build latest docker image
-puts "docker build -t #{ENV['DOCKER_REPO']} ./ds3_java_cli/docker/"
-docker_build_output = `docker build -t #{ENV["DOCKER_REPO"]} ./ds3_java_cli/docker/`
+puts "docker build --pull=true -t #{ENV['DOCKER_REPO']} ./ds3_java_cli/docker/"
+docker_build_output = `docker build --pull=true -t #{ENV["DOCKER_REPO"]} ./ds3_java_cli/docker/`
 docker_build_status = $?
 puts docker_build_output
 puts "docker build status[#{docker_build_status}][#{docker_build_status.exitstatus}]"

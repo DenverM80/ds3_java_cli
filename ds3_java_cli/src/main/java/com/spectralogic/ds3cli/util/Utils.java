@@ -18,6 +18,7 @@ package com.spectralogic.ds3cli.util;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.spectralogic.ds3cli.command.PutBulk;
 import com.spectralogic.ds3client.Ds3Client;
 import com.spectralogic.ds3client.commands.spectrads3.GetSystemInformationSpectraS3Request;
@@ -36,6 +37,7 @@ import java.nio.file.attribute.FileTime;
 import java.security.SignatureException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -106,7 +108,7 @@ public final class Utils {
         return o.toString();
     }
 
-    public static String nullGuardToDate(final Object o, SimpleDateFormat dateFormat) {
+    public static String nullGuardToDate(final Object o, final SimpleDateFormat dateFormat) {
         if (o == null) {
             return dateFormat.format(new Date(0L));
         }
@@ -252,4 +254,13 @@ public final class Utils {
         }
     }
 
+    public static List<Ds3Object> getDs3Objects(final int numberOfFiles, final long sizeOfFiles) {
+        final List<Ds3Object> objList = Lists.newArrayList();
+        for (int i = 0; i < numberOfFiles; i++) {
+            final long testFileSize = sizeOfFiles * 1024L * 1024L;
+            final Ds3Object obj = new Ds3Object("file_" + i, testFileSize);
+            objList.add(obj);
+        }
+        return objList;
+    }
 }
