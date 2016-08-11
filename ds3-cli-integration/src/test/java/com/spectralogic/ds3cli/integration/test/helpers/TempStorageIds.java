@@ -23,8 +23,8 @@ import java.util.UUID;
  * These IDs are stored for teardown of testing environment.
  */
 public class TempStorageIds {
-    private UUID storageDomainMemberId;
-    private UUID dataPersistenceRuleId;
+    final private UUID storageDomainMemberId;
+    final private UUID dataPersistenceRuleId;
 
     public TempStorageIds(final UUID storageDomainMemberId, final UUID dataPersistenceRuleId) {
         this.storageDomainMemberId = storageDomainMemberId;
