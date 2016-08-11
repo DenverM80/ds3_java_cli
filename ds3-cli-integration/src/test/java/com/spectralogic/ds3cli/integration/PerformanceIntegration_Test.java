@@ -65,17 +65,17 @@ public class PerformanceIntegration_Test {
     }
 
     @Test
-    public void testPerformance_10_x_1500mb_3_threads() throws Exception {
+    public void testPerformance_2_x_5mb_3_threads() throws Exception {
         LOG.info("Testing Performance for 10 x 1500mb files using 3 threads");
         numberOfFiles = "10";
         sizeOfFiles = "1500";
         numberOfThreads = "3";
         runPerformanceTest();
 
-        LOG.info("  PUT: {}", HELPERS.putMbps());
-        assert(HELPERS.putMbps() > 500);
-        LOG.info("  GET: {}", HELPERS.getMbps());
-        assert(HELPERS.getMbps() > 700);
+        LOG.info("  PUT: {}", HELPERS.putAvgPutsMbps());
+        assert(HELPERS.putAvgPutsMbps() > 500);
+        LOG.info("  GET: {}", HELPERS.getAvgGetsMbps());
+        assert(HELPERS.getAvgGetsMbps() > 700);
     }
 
     private void runPerformanceTest() throws Exception {

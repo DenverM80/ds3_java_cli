@@ -24,12 +24,12 @@ public class Ds3TestClientHelperImpl extends Ds3ClientHelpers {
         this.helper = Ds3ClientHelpers.wrap(client);
     }
 
-    public double getMbps() {
-        return this.testGetPerformanceListener.getMbps();
+    public double getAvgGetsMbps() {
+        return this.testGetPerformanceListener.getAvgMbps();
     }
 
-    public double putMbps() {
-        return this.testPutPerformanceListener.getMbps();
+    public double putAvgPutsMbps() {
+        return this.testPutPerformanceListener.getAvgMbps();
     }
 
     private class TestPerformanceListener implements DataTransferredListener {
@@ -37,7 +37,7 @@ public class Ds3TestClientHelperImpl extends Ds3ClientHelpers {
         private double time;
         private long totalByteTransferred = 0;
         private long content;
-        private double mbps;
+        private double mbps = 0;
         private double highestMbps = 0.0;
 
         public TestPerformanceListener() {
@@ -57,7 +57,7 @@ public class Ds3TestClientHelperImpl extends Ds3ClientHelpers {
             }
         }
 
-        public double getMbps() {
+        public double getAvgMbps() {
             return this.mbps;
         }
     }

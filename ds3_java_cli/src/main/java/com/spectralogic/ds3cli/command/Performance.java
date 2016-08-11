@@ -65,7 +65,7 @@ public class Performance extends CliCommand<DefaultResult> {
 
     @Override
     public DefaultResult call() throws Exception {
-        final Ds3ClientHelpers helpers = Ds3ClientHelpers.wrap(getClient());
+        final Ds3ClientHelpers helpers = getProvider().getClientHelpers();//Ds3ClientHelpers.wrap(getClient());
         final int numberOfFiles = Integer.valueOf(this.numberOfFiles);
         final long sizeOfFiles = Integer.valueOf(this.sizeOfFiles);
 
