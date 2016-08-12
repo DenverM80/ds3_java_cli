@@ -33,9 +33,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
 import java.security.SignatureException;
 import java.util.UUID;
+
+import static org.junit.Assert.assertTrue;
 
 public class PerformanceIntegration_Test {
     private static final Logger LOG = LoggerFactory.getLogger(PerformanceIntegration_Test.class);
@@ -73,14 +75,16 @@ public class PerformanceIntegration_Test {
         runPerformanceTest();
 
         LOG.info("  PUT: {}", HELPERS.putAvgPutsMbps());
-        assert(HELPERS.putAvgPutsMbps() > 500);
+        assertTrue(HELPERS.putAvgPutsMbps() > 500);
         LOG.info("  GET: {}", HELPERS.getAvgGetsMbps());
-        assert(HELPERS.getAvgGetsMbps() > 700);
+        assertTrue(HELPERS.getAvgGetsMbps() > 700);
     }
 
     private void runPerformanceTest() throws Exception {
         try {
-            final Arguments args = new Arguments(new String[]{"--http",
+            final Arguments args = new Arguments(
+                new String[]{
+                    "--http",
                     "-c", "performance",
                     "-b", this.bucketName,
                     "-n", this.numberOfFiles,
