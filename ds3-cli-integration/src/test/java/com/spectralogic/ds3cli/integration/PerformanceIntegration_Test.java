@@ -1,6 +1,6 @@
 /*
  * ******************************************************************************
- *   Copyright 2014-2015 Spectra Logic Corporation. All Rights Reserved.
+ *   Copyright 2014-2016 Spectra Logic Corporation. All Rights Reserved.
  *   Licensed under the Apache License, Version 2.0 (the "License"). You may not use
  *   this file except in compliance with the License. A copy of the License is located at
  *
@@ -43,7 +43,7 @@ public class PerformanceIntegration_Test {
     private static final Ds3Client client = Ds3ClientBuilder.fromEnv().withHttps(false).build();
     private static final Ds3TestClientHelperImpl HELPERS = new Ds3TestClientHelperImpl(client);
 
-    private static final String TEST_ENV_NAME = "FeatureIntegration_Test";
+    private static final String TEST_ENV_NAME = "PerformanceIntegration_Test";
     private static TempStorageIds envStorageIds;
     private static UUID envDataPolicyId;
 
@@ -65,7 +65,7 @@ public class PerformanceIntegration_Test {
     }
 
     @Test
-    public void testPerformance_2_x_5mb_3_threads() throws Exception {
+    public void testPerformance_10_x_1500mb_3_threads() throws Exception {
         LOG.info("Testing Performance for 10 x 1500mb files using 3 threads");
         numberOfFiles = "10";
         sizeOfFiles = "1500";
