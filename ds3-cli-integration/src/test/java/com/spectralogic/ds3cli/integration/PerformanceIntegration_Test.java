@@ -43,16 +43,10 @@ public class PerformanceIntegration_Test {
     private static final Logger LOG = LoggerFactory.getLogger(PerformanceIntegration_Test.class);
 
     private static final Ds3Client client = Ds3ClientBuilder.fromEnv().withHttps(false).build();
-    private static final Ds3TestClientHelperImpl HELPERS = new Ds3TestClientHelperImpl(client);
 
     private static final String TEST_ENV_NAME = "PerformanceIntegration_Test";
     private static TempStorageIds envStorageIds;
     private static UUID envDataPolicyId;
-
-    private final String bucketName = "test_JavaCLI_performance";
-    private String numberOfFiles;
-    private String sizeOfFiles;
-    private String numberOfThreads;
 
     @BeforeClass
     public static void startup() throws IOException, SignatureException {
@@ -68,34 +62,39 @@ public class PerformanceIntegration_Test {
 
     @Test
     public void testPerformance_10_x_1500mb_3_threads() throws Exception {
+        final Ds3TestClientHelperImpl helper = new Ds3TestClientHelperImpl(client);
         LOG.info("Testing Performance for 10 x 1500mb files using 3 threads");
-        numberOfFiles = "10";
-        sizeOfFiles = "1500";
-        numberOfThreads = "3";
-        runPerformanceTest();
+        final String numberOfFiles = "10";
+        final String sizeOfFiles = "1500";
+        final String numberOfThreads = "3";
+        runPerformanceTest(helper, numberOfFiles, numberOfThreads, sizeOfFiles);
 
-        LOG.info("  PUT: {}", HELPERS.putAvgPutsMbps());
-        assertTrue(HELPERS.putAvgPutsMbps() > 500);
-        LOG.info("  GET: {}", HELPERS.getAvgGetsMbps());
-        assertTrue(HELPERS.getAvgGetsMbps() > 700);
+        LOG.info("  PUT AvgMps: {}", helper.putAvgPutsMbps());
+        assertTrue(helper.putAvgPutsMbps() > 500);
+        LOG.info("  GET AvgMps: {}", helper.getAvgGetsMbps());
+        assertTrue(helper.getAvgGetsMbps() > 700);
     }
 
-    private void runPerformanceTest() throws Exception {
+    private void runPerformanceTest(
+            final Ds3TestClientHelperImpl helper,
+            final String numberOfFiles,
+            final String numberOfThreads,
+            final String sizeOfFiles) throws Exception {
         try {
             final Arguments args = new Arguments(
                 new String[]{
                     "--http",
                     "-c", "performance",
-                    "-b", this.bucketName,
-                    "-n", this.numberOfFiles,
-                    "-nt", this.numberOfThreads,
-                    "-s", this.sizeOfFiles});
-            final Ds3Provider provider = new Ds3ProviderImpl(client, HELPERS);
+                    "-b", TEST_ENV_NAME,
+                    "-n", numberOfFiles,
+                    "-nt", numberOfThreads,
+                    "-s", sizeOfFiles});
+            final Ds3Provider provider = new Ds3ProviderImpl(client, helper);
             final FileUtils fileUtils = new FileUtilsImpl();
             final Ds3Cli runner = new Ds3Cli(provider, args, fileUtils);
             runner.call();
         } finally {
-            Util.deleteBucket(client, bucketName);
+            Util.deleteBucket(client, TEST_ENV_NAME);
         }
     }
 }
