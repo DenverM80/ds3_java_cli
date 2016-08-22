@@ -26,6 +26,7 @@ import com.spectralogic.ds3cli.util.Ds3Provider;
 import com.spectralogic.ds3cli.util.FileUtils;
 import com.spectralogic.ds3client.Ds3Client;
 import com.spectralogic.ds3client.Ds3ClientBuilder;
+import com.spectralogic.ds3client.helpers.Ds3ClientHelpers;
 import com.spectralogic.ds3client.models.ChecksumType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -60,32 +61,48 @@ public class PerformanceIntegration_Test {
         client.close();
     }
 
+
+    @Test
+    public void testPerformance_2() throws Exception {
+        final Ds3ClientHelpers helper = Ds3ClientHelpers.wrap(client);
+        LOG.info("Testing Performance for 10 x 500mb files using 3 threads");
+        final String bucketId = "perf2";
+        final String numberOfFiles = "10";
+        final String sizeOfFiles = "500";
+        final String numberOfThreads = "3";
+        runPerformanceTest(helper, bucketId, numberOfFiles, sizeOfFiles, numberOfThreads);
+    }
+
+    /*
     @Test
     public void testPerformance_10_x_1500mb_3_threads() throws Exception {
         final Ds3TestClientHelperImpl helper = new Ds3TestClientHelperImpl(client);
         LOG.info("Testing Performance for 10 x 1500mb files using 3 threads");
+        final String bucketId = "performance_10_x_1500mb_3_threads";
         final String numberOfFiles = "10";
         final String sizeOfFiles = "1500";
         final String numberOfThreads = "3";
-        runPerformanceTest(helper, numberOfFiles, numberOfThreads, sizeOfFiles);
+        runPerformanceTest(helper, bucketId, numberOfFiles, sizeOfFiles, numberOfThreads);
 
         LOG.info("  PUT AvgMps: {}", helper.putAvgPutsMbps());
         assertTrue(helper.putAvgPutsMbps() > 500);
         LOG.info("  GET AvgMps: {}", helper.getAvgGetsMbps());
         assertTrue(helper.getAvgGetsMbps() > 700);
     }
+    */
 
     private void runPerformanceTest(
-            final Ds3TestClientHelperImpl helper,
+            final Ds3ClientHelpers helper,
+            final String bucketId,
             final String numberOfFiles,
-            final String numberOfThreads,
-            final String sizeOfFiles) throws Exception {
+            final String sizeOfFiles,
+            final String numberOfThreads) throws Exception {
         try {
             final Arguments args = new Arguments(
                 new String[]{
                     "--http",
                     "-c", "performance",
-                    "-b", TEST_ENV_NAME,
+                    "-b", bucketId,
                     "-n", numberOfFiles,
                     "-nt", numberOfThreads,
                     "-s", sizeOfFiles});
